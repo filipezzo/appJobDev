@@ -1,11 +1,6 @@
-import {
-  numberEl,
-  spinnerSearchEl,
-  jobListSearchEl,
-  spinnerJobDetailsEl,
-  jobDetailsContentEl,
-} from "../common.js";
+import { numberEl, jobListSearchEl, jobDetailsContentEl } from "../common.js";
 
+import renderSpinner from "./Spinner.js";
 export const fetchJobs = async (searchText) => {
   try {
     const response = await fetch(
@@ -20,7 +15,7 @@ export const fetchJobs = async (searchText) => {
     const { jobItems } = data;
 
     numberEl.textContent = jobItems.length;
-    spinnerSearchEl.classList.remove("spinner--visible");
+    renderSpinner("search");
 
     jobItems.slice(0, 7).forEach((job) => {
       const newJobItemHTML = `<li class="job-item">
@@ -62,7 +57,7 @@ export const fetchJobDetails = async (id) => {
     }
 
     const { jobItem } = data;
-    spinnerJobDetailsEl.classList.remove("spinner--visible");
+    renderSpinner("job-details");
 
     const jobDetailsHTML = `<img src="${
       jobItem.coverImgURL
@@ -152,7 +147,7 @@ const clickHandler = (event) => {
   jobItemEl.classList.add("job-item--active");
 
   jobDetailsContentEl.innerHTML = "";
-  spinnerJobDetailsEl.classList.add("spinner--visible");
+  renderSpinner("job-details");
 
   const id = jobItemEl.children[0].getAttribute("href");
   fetchJobDetails(id);
